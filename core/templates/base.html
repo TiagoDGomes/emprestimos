@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Starter</title>
+    <title>[Alpha] Empréstimos</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
     <!-- Font Awesome -->
@@ -31,6 +31,9 @@
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+
+    <link rel="stylesheet" href="{% static 'css/geral.css' %}">
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -53,7 +56,7 @@ desired effect
 |---------------------------------------------------------|
 -->
 
-<body class="sidebar-mini skin-green">
+<body class="sidebar-mini  skin-green">
     <div class="wrapper">
 
         <!-- Main Header -->
@@ -148,7 +151,8 @@ desired effect
                                                 <!-- The progress bar -->
                                                 <div class="progress xs">
                                                     <!-- Change the css width attribute to simulate progress -->
-                                                    <div class="progress-bar progress-bar-red" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar progress-bar-red" style="width: 20%" role="progressbar"
+                                                        aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
                                                         <span class="sr-only">5 dias</span>
                                                     </div>
                                                 </div>
@@ -193,63 +197,22 @@ desired effect
                                 </li>
                             </ul>
                         </li>
-                        <!-- Control Sidebar Toggle Button -->
-                        <!-- <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li> -->
+                        <!-- Control Sidebar Toggle Button 
+                        <li>
+                            <a href="#" data-toggle="control-sidebar">
+                                <i class="fa fa-gears"></i>
+                            </a>
+                        </li>-->
                     </ul>
                 </div>
             </nav>
         </header>
-        <!-- Left side column. contains the logo and sidebar -->
-        <aside class="main-sidebar">
-            <!-- sidebar: style can be found in sidebar.less -->
-            <section class="sidebar">
-                <!-- Sidebar Menu -->
-                <ul class="sidebar-menu" data-widget="tree">
-                    <!-- li class="header">HEADER</li> -->
-                    <!-- Optionally, you can add icons to the links -->
-                    <li class="active">
-                        <a href="#">
-                            <i class="fa fa-link"></i>
-                            <span>Início</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-shopping-cart"></i>
-                            <span>Solicitar</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-shopping-bag"></i>
-                            <span>Preparar</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-arrow-up"></i>
-                            <span>Emprestar</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-arrow-down"></i>
-                            <span>Devolver</span>
-                        </a>
-                    </li>
 
-                </ul>
-                <!-- /.sidebar-menu -->
-            </section>
-            <!-- /.sidebar -->
-        </aside>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
-            <!-- <section class="content-header">
+            <section class="content-header">
                 <h1>
                     Página inicial
                     <small>Contém informações básicas do sistema</small>
@@ -279,108 +242,178 @@ desired effect
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">About Me</h3>
-                            </div>
-                            <!-- /.box-header -->
-                            <div class="box-body">
-                                <strong>
-                                    <i class="fa fa-book margin-r-5"></i> Education</strong>
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title" data-unsp-sanitized="clean">Lista de itens</h3>
 
-                                <p class="text-muted">
-                                    B.S. in Computer Science from the University of Tennessee at Knoxville
-                                </p>
-
-                                <hr>
-
-                                <strong>
-                                    <i class="fa fa-map-marker margin-r-5"></i> Location</strong>
-
-                                <p class="text-muted">Malibu, California</p>
-
-                                <hr>
-
-                                <strong>
-                                    <i class="fa fa-pencil margin-r-5"></i> Skills</strong>
-
-                                <p>
-                                    <span class="label label-danger">UI Design</span>
-                                    <span class="label label-success">Coding</span>
-                                    <span class="label label-info">Javascript</span>
-                                    <span class="label label-warning">PHP</span>
-                                    <span class="label label-primary">Node.js</span>
-                                </p>
-
-                                <hr>
-
-                                <strong>
-                                    <i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
-
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
-                            </div>
-                            <!-- /.box-body -->
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                                <h3 class="">Sete Desafios Para Ser Rei</h3>
-                            </div>
-
-                            <div class="box-body">
-
-                                <p class="text-muted">Autor desconhecido</p>
-
-                                <ul class="list-group list-group-unbordered">
-                                    <li class="list-group-item">
-                                        <b>Local</b>
-                                        <a class="pull-right">Oficina</a>
-                                    </li>
-
-
-                                </ul>
-                                <a href="#" class="btn btn-success btn-xs">
-                                    <b>Fazer empréstimo </b>
-                                    <i class="fa fa-arrow-up"></i>
-                                </a>
-                                <a href="#" class="btn btn-success btn-xs">
-                                    <i class="fa fa-plus"></i>
-                                </a>
-                                <a href="#" class="btn btn-primary pull-right btn-xs">
-                                    <b>Adicionar ao carrinho </b>
-                                    <i class="fa fa-shopping-cart"></i>
-                                </a>
-
-                            </div>
-                            <!-- /.box-body -->
-                        </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <ul class="products-list product-list-in-box">
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
+                                </div>
+                                <div class="product-info">
+                                    <a data-toggle="modal" data-target="#modal-default" href="javascript:void(0)" class="product-title"
+                                        data-unsp-sanitized="clean">Samsung
+                                        TV
+                                        <span class="label label-warning pull-right">Emprestado</span></a>
+                                    <span class="product-description">
+                                        Samsung 32" 1080p 60Hz LED Smart HDTV.
+                                    </span>
+                                </div>
+                            </li>
+                            <!-- /.item -->
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
+                                </div>
+                                <div class="product-info">
+                                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">Bicycle
+                                        <span class="label label-info pull-right">Disponível</span></a>
+                                    <span class="product-description">
+                                        26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                                    </span>
+                                </div>
+                            </li>
+                            <!-- /.item -->
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
+                                </div>
+                                <div class="product-info">
+                                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">Xbox
+                                        One
+                                        <span class="label label-danger pull-right">Não devolvido</span></a>
+                                    <span class="product-description">
+                                        Xbox One Console Bundle with Halo Master Chief Collection.
+                                    </span>
+                                </div>
+                            </li>
+                            <!-- /.item -->
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
+                                </div>
+                                <div class="product-info">
+                                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">PlayStation
+                                        4
+                                        <span class="label label-success pull-right">Livre</span></a>
+                                    <span class="product-description">
+                                        PlayStation 4 500GB Console (PS4)
+                                    </span>
+                                </div>
+                            </li>
+                            <!-- /.item -->
+                        </ul>
                     </div>
-                    {% block content %} {% endblock content %}
+                    <!-- /.box-body -->
+                    <div class="box-footer text-center">
+                        <a href="javascript:void(0)" class="uppercase" data-unsp-sanitized="clean">View All Products</a>
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+                {% block content %} {% endblock content %}
 
             </section>
             <!-- /.content -->
-            </div>
-            <!-- /.content-wrapper -->
-
-            <!-- Main Footer -->
-            <footer class="main-footer">
-                <!-- To the right -->
-                <div class="pull-right hidden-xs">
-                    IFSP
-                </div>
-                <!-- Default to the left -->
-                <strong>Sistema de empréstimos
-            </footer>
-
-
-
-
         </div>
+        <!-- /.content-wrapper -->
+
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="pull-right hidden-xs">
+                IFSP
+            </div>
+            <!-- Default to the left -->
+            <strong>Sistema de empréstimos
+        </footer>
+
         <!-- ./wrapper -->
+
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Lista de empréstimos</h4>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="timeline">
+
+                            <!-- timeline time label -->
+                            <li class="time-label">
+                                <span class="bg-red">
+                                    10 Feb. 2014
+                                </span>
+                            </li>
+                            <!-- /.timeline-label -->
+
+                            <!-- timeline item -->
+                            <li>
+                                <!-- timeline icon -->
+                                <i class="fa fa-arrow-down bg-green"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+
+                                    <h3 class="timeline-header"><a href="#">João</a> devolveu</h3>
+
+                                    <div class="timeline-body">
+
+                                    </div>
+
+                                    <div class="timeline-footer">
+                                        <a class="btn btn-primary btn-xs">Editar</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- END timeline item -->
+                            <!-- timeline item -->
+                            <li>
+                                <!-- timeline icon -->
+                                <i class="fa fa-arrow-up bg-red"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> 11:05</span>
+
+                                    <h3 class="timeline-header"><a href="#">João</a> pegou</h3>
+
+                                    <div class="timeline-body">
+
+                                    </div>
+
+                                    <div class="timeline-footer">
+                                        <a class="btn btn-warning btn-xs">Editar</a>
+                                        <a class="btn btn-danger btn-xs">Remover</a>
+                                        <a class="btn btn-primary btn-xs">Devolver</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- END timeline item -->
+
+
+                        </ul>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Editar o item</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
 
         <!-- REQUIRED JS SCRIPTS -->
 
