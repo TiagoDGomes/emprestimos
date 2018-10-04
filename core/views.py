@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
-def index(request):
-    return render(request, 'base.html') 
+def emprestimos(request):
+    return render(request, 'emprestimos.html') 
 
 
-def scan_json(request):
+def busca(request):
     pass

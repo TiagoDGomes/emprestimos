@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Pessoa, Emprestimo, ItemEmprestimo
 
-# Register your models here.
+admin.site.register(Pessoa)
+admin.site.register(ItemEmprestimo)
+admin.site.register(Emprestimo)

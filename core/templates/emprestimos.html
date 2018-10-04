@@ -1,0 +1,255 @@
+{% extends "base.html" %}{% load static %}
+{% block content %}
+
+
+<div class="row">
+    <div class="col col-sm-12">
+        <form action="#" method="get" class="form-horizontal">
+            <div class="box box-default">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="solicitante" class="col-sm-2 control-label">Solicitante:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="solicitante" placeholder="Nome do solicitante, prontuário ou CPF">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="busca" class="col-sm-2 control-label">Localizar:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="busca" placeholder="Buscar item">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title" data-unsp-sanitized="clean">Itens da busca</h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <ul class="products-list product-list-in-box">
+            <li class="item">
+                <div class="product-img">
+                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
+                </div>
+                <div class="product-info">
+                    <a data-toggle="modal" data-target="#modal-default" href="javascript:void(0)" class="product-title"
+                        data-unsp-sanitized="clean">Samsung
+                        TV
+                        <span class="label label-warning pull-right">Emprestado</span></a>
+                    <span class="product-description">
+                        Samsung 32" 1080p 60Hz LED Smart HDTV.
+                    </span>
+                </div>
+            </li>
+            <!-- /.item -->
+            <li class="item">
+                <div class="product-img">
+                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
+                </div>
+                <div class="product-info">
+                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">Bicycle
+                        <span class="label label-info pull-right">Disponível</span></a>
+                    <span class="product-description">
+                        26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                    </span>
+                </div>
+            </li>
+            <!-- /.item -->
+            <li class="item">
+                <div class="product-img">
+                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
+                </div>
+                <div class="product-info">
+                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">Xbox
+                        One
+                        <span class="label label-danger pull-right">Não devolvido</span></a>
+                    <span class="product-description">
+                        Xbox One Console Bundle with Halo Master Chief Collection.
+                    </span>
+                </div>
+            </li>
+            <!-- /.item -->
+            <li class="item">
+                <div class="product-img">
+                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
+                </div>
+                <div class="product-info">
+                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">PlayStation
+                        4
+                        <span class="label label-success pull-right">Livre</span></a>
+                    <span class="product-description">
+                        PlayStation 4 500GB Console (PS4)
+                    </span>
+                </div>
+            </li>
+            <!-- /.item -->
+        </ul>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer text-center">
+        <a href="javascript:void(0)" class="uppercase" data-unsp-sanitized="clean">View All Products</a>
+    </div>
+    <!-- /.box-footer -->
+</div>
+
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title" data-unsp-sanitized="clean">Pendências da pessoa solicitante</h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <ul class="products-list product-list-in-box">
+            
+            <!-- /.item -->
+            <li class="item">
+                <div class="product-img">
+                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
+                </div>
+                <div class="product-info">
+                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">Bicycle
+                        <span class="label label-info pull-right">Disponível</span></a>
+                    <span class="product-description">
+                        26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                    </span>
+                </div>
+            </li>
+            <!-- /.item -->
+            <li class="item">
+                <div class="product-img">
+                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
+                </div>
+                <div class="product-info">
+                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">Xbox
+                        One
+                        <span class="label label-danger pull-right">Não devolvido</span></a>
+                    <span class="product-description">
+                        Xbox One Console Bundle with Halo Master Chief Collection.
+                    </span>
+                </div>
+            </li>
+            <!-- /.item -->
+            <li class="item">
+                <div class="product-img">
+                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
+                </div>
+                <div class="product-info">
+                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">PlayStation
+                        4
+                        <span class="label label-success pull-right">Livre</span></a>
+                    <span class="product-description">
+                        PlayStation 4 500GB Console (PS4)
+                    </span>
+                </div>
+            </li>
+            <!-- /.item -->
+        </ul>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer text-center">
+        <a href="javascript:void(0)" class="uppercase" data-unsp-sanitized="clean">View All Products</a>
+    </div>
+    <!-- /.box-footer -->
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Lista de empréstimos</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="timeline">
+
+                    <!-- timeline time label -->
+                    <li class="time-label">
+                        <span class="bg-red">
+                            10 Feb. 2014
+                        </span>
+                    </li>
+                    <!-- /.timeline-label -->
+
+                    <!-- timeline item -->
+                    <li>
+                        <!-- timeline icon -->
+                        <i class="fa fa-arrow-down bg-green"></i>
+                        <div class="timeline-item">
+                            <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+
+                            <h3 class="timeline-header"><a href="#">João</a> devolveu</h3>
+
+                            <div class="timeline-body">
+
+                            </div>
+
+                            <div class="timeline-footer">
+                                <a class="btn btn-primary btn-xs">Editar</a>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- END timeline item -->
+                    <!-- timeline item -->
+                    <li>
+                        <!-- timeline icon -->
+                        <i class="fa fa-arrow-up bg-red"></i>
+                        <div class="timeline-item">
+                            <span class="time"><i class="fa fa-clock-o"></i> 11:05</span>
+
+                            <h3 class="timeline-header"><a href="#">João</a> pegou</h3>
+
+                            <div class="timeline-body">
+
+                            </div>
+
+                            <div class="timeline-footer">
+                                <a class="btn btn-warning btn-xs">Editar</a>
+                                <a class="btn btn-danger btn-xs">Remover</a>
+                                <a class="btn btn-primary btn-xs">Devolver</a>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- END timeline item -->
+
+
+                </ul>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Editar o item</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+{% endblock content %}

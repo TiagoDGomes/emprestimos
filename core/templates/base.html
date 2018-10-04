@@ -56,7 +56,7 @@ desired effect
 |---------------------------------------------------------|
 -->
 
-<body class="sidebar-mini  skin-green">
+<body class="sidebar-mini  skin-green ">
     <div class="wrapper">
 
         <!-- Main Header -->
@@ -77,11 +77,10 @@ desired effect
                     <span class="sr-only">Toggle navigation</span>
                 </a>
                 <!-- Navbar Right Menu -->
+                <!--
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
-                        <!-- Messages: style can be found in dropdown.less-->
                         <li class="dropdown messages-menu">
-                            <!-- Menu toggle button -->
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span class="label label-success"></span>
@@ -89,12 +88,11 @@ desired effect
                             <ul class="dropdown-menu">
                                 <li class="header">Você não tem nenhum item no carrinho</li>
                                 <li>
-                                    <!-- Inner Menu: contains the notifications -->
+                                  
                                     <ul class="menu">
                                         <li>
 
                                         </li>
-                                        <!-- end notification -->
                                     </ul>
                                 </li>
                                 <li class="footer">
@@ -102,11 +100,8 @@ desired effect
                                 </li>
                             </ul>
                         </li>
-                        <!-- /.messages-menu -->
 
-                        <!-- Notifications Menu -->
                         <li class="dropdown notifications-menu">
-                            <!-- Menu toggle button -->
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
                                 <span class="label label-warning"></span>
@@ -114,13 +109,9 @@ desired effect
                             <ul class="dropdown-menu">
                                 <li class="header">Você não tem notificações</li>
                                 <li>
-                                    <!-- Inner Menu: contains the notifications -->
                                     <ul class="menu">
                                         <li>
-                                            <!-- start notification -->
-
                                         </li>
-                                        <!-- end notification -->
                                     </ul>
                                 </li>
                                 <li class="footer">
@@ -128,9 +119,7 @@ desired effect
                                 </li>
                             </ul>
                         </li>
-                        <!-- Tasks Menu -->
                         <li class="dropdown tasks-menu">
-                            <!-- Menu Toggle Button -->
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-flag-o"></i>
                                 <span class="label label-danger">0</span>
@@ -138,19 +127,14 @@ desired effect
                             <ul class="dropdown-menu">
                                 <li class="header">Você tem 1 penalização</li>
                                 <li>
-                                    <!-- Inner menu: contains the tasks -->
                                     <ul class="menu">
                                         <li>
-                                            <!-- Task item -->
                                             <a href="#">
-                                                <!-- Task title and progress text -->
                                                 <h3>
                                                     Tempo até terminar penalização:
                                                     <small class="pull-right">5 dias</small>
                                                 </h3>
-                                                <!-- The progress bar -->
                                                 <div class="progress xs">
-                                                    <!-- Change the css width attribute to simulate progress -->
                                                     <div class="progress-bar progress-bar-red" style="width: 20%" role="progressbar"
                                                         aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
                                                         <span class="sr-only">5 dias</span>
@@ -158,7 +142,6 @@ desired effect
                                                 </div>
                                             </a>
                                         </li>
-                                        <!-- end task item -->
                                     </ul>
                                 </li>
                                 <li class="footer">
@@ -166,17 +149,13 @@ desired effect
                                 </li>
                             </ul>
                         </li>
-                        <!-- User Account Menu -->
+
                         <li class="dropdown user user-menu">
-                            <!-- Menu Toggle Button -->
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <!-- The user image in the navbar-->
                                 <img src="{% static 'adminlte/img/avatar.png' %}" class="user-image" alt="User Image">
-                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
                                 <span class="hidden-xs">Alexander Pierce</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <!-- The user image in the menu -->
                                 <li class="user-header">
                                     <img src="{% static 'adminlte/img/avatar.png' %}" class="img-circle" alt="User Image">
 
@@ -186,7 +165,6 @@ desired effect
                                     </p>
                                 </li>
 
-                                <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
                                         <a href="#" class="btn btn-default btn-flat">Profile</a>
@@ -197,16 +175,58 @@ desired effect
                                 </li>
                             </ul>
                         </li>
-                        <!-- Control Sidebar Toggle Button 
-                        <li>
-                            <a href="#" data-toggle="control-sidebar">
-                                <i class="fa fa-gears"></i>
-                            </a>
-                        </li>-->
                     </ul>
-                </div>
+                </div>-->
             </nav>
         </header>
+
+
+
+
+
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar" style="height: auto;">
+              <!-- Sidebar user panel -->
+              <div class="user-panel">
+                <div class="pull-left image">
+                  <img src="{% static '/img/default-50x50.gif' %}" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                  <p>Alexander Pierce</p>
+                  <a href="#" data-unsp-sanitized="clean"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+              </div>
+              <
+              <!-- /.search form -->
+              <!-- sidebar menu: : style can be found in sidebar.less -->
+              <ul class="sidebar-menu tree" data-widget="tree">
+                <li class="header">Operações</li>                
+                <li><a href="{% url 'emprestimos' %}" data-unsp-sanitized="clean"><i class="fa fa-book"></i> <span>Empréstimos</span></a></li>
+                <li class="header">Administração</li>
+                <li><a href="{% url 'admin:index' %}" data-unsp-sanitized="clean"><i class="fa fa-circle-o text-red"></i> <span>Administração</span></a></li>
+                <!--<li><a href="#" data-unsp-sanitized="clean"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
+                <li><a href="#" data-unsp-sanitized="clean"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>-->
+              
+            </section>
+            <!-- /.sidebar -->
+          </aside>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         <!-- Content Wrapper. Contains page content -->
@@ -214,111 +234,15 @@ desired effect
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                    Página inicial
-                    <small>Contém informações básicas do sistema</small>
+                    {{ title }}
+                    <small></small>
                 </h1>
 
             </section>
 
             <!-- Main content -->
             <section class="content container-fluid">
-                <div class="row">
-                    <div class="col col-sm-12">
-                        <div class="box box-default">
-                            <!-- /.box-header -->
-                            <div class="box-body">
-                                <form action="#" method="get">
-                                    <div class="input-group">
-                                        <input type="text" name="q" class="form-control" placeholder="Buscar item...">
-                                        <span class="input-group-btn">
-                                            <button type="submit" name="search" id="search-btn" class="btn btn-flat">
-                                                <i class="fa fa-search"></i>
-                                            </button>
-                                        </span>
-                                    </div>
-                                </form>
-                            </div>
-                            <!-- /.box-body -->
-                        </div>
-                    </div>
-                </div>
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title" data-unsp-sanitized="clean">Lista de itens</h3>
-
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <ul class="products-list product-list-in-box">
-                            <li class="item">
-                                <div class="product-img">
-                                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
-                                </div>
-                                <div class="product-info">
-                                    <a data-toggle="modal" data-target="#modal-default" href="javascript:void(0)" class="product-title"
-                                        data-unsp-sanitized="clean">Samsung
-                                        TV
-                                        <span class="label label-warning pull-right">Emprestado</span></a>
-                                    <span class="product-description">
-                                        Samsung 32" 1080p 60Hz LED Smart HDTV.
-                                    </span>
-                                </div>
-                            </li>
-                            <!-- /.item -->
-                            <li class="item">
-                                <div class="product-img">
-                                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
-                                </div>
-                                <div class="product-info">
-                                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">Bicycle
-                                        <span class="label label-info pull-right">Disponível</span></a>
-                                    <span class="product-description">
-                                        26" Mongoose Dolomite Men's 7-speed, Navy Blue.
-                                    </span>
-                                </div>
-                            </li>
-                            <!-- /.item -->
-                            <li class="item">
-                                <div class="product-img">
-                                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
-                                </div>
-                                <div class="product-info">
-                                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">Xbox
-                                        One
-                                        <span class="label label-danger pull-right">Não devolvido</span></a>
-                                    <span class="product-description">
-                                        Xbox One Console Bundle with Halo Master Chief Collection.
-                                    </span>
-                                </div>
-                            </li>
-                            <!-- /.item -->
-                            <li class="item">
-                                <div class="product-img">
-                                    <img src="{% static 'img/default-50x50.gif' %}" alt="Product Image">
-                                </div>
-                                <div class="product-info">
-                                    <a href="javascript:void(0)" class="product-title" data-unsp-sanitized="clean">PlayStation
-                                        4
-                                        <span class="label label-success pull-right">Livre</span></a>
-                                    <span class="product-description">
-                                        PlayStation 4 500GB Console (PS4)
-                                    </span>
-                                </div>
-                            </li>
-                            <!-- /.item -->
-                        </ul>
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer text-center">
-                        <a href="javascript:void(0)" class="uppercase" data-unsp-sanitized="clean">View All Products</a>
-                    </div>
-                    <!-- /.box-footer -->
-                </div>
+                
                 {% block content %} {% endblock content %}
 
             </section>
@@ -338,80 +262,7 @@ desired effect
 
         <!-- ./wrapper -->
 
-        <div class="modal fade" id="modal-default">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Lista de empréstimos</h4>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="timeline">
-
-                            <!-- timeline time label -->
-                            <li class="time-label">
-                                <span class="bg-red">
-                                    10 Feb. 2014
-                                </span>
-                            </li>
-                            <!-- /.timeline-label -->
-
-                            <!-- timeline item -->
-                            <li>
-                                <!-- timeline icon -->
-                                <i class="fa fa-arrow-down bg-green"></i>
-                                <div class="timeline-item">
-                                    <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-                                    <h3 class="timeline-header"><a href="#">João</a> devolveu</h3>
-
-                                    <div class="timeline-body">
-
-                                    </div>
-
-                                    <div class="timeline-footer">
-                                        <a class="btn btn-primary btn-xs">Editar</a>
-                                    </div>
-                                </div>
-                            </li>
-                            <!-- END timeline item -->
-                            <!-- timeline item -->
-                            <li>
-                                <!-- timeline icon -->
-                                <i class="fa fa-arrow-up bg-red"></i>
-                                <div class="timeline-item">
-                                    <span class="time"><i class="fa fa-clock-o"></i> 11:05</span>
-
-                                    <h3 class="timeline-header"><a href="#">João</a> pegou</h3>
-
-                                    <div class="timeline-body">
-
-                                    </div>
-
-                                    <div class="timeline-footer">
-                                        <a class="btn btn-warning btn-xs">Editar</a>
-                                        <a class="btn btn-danger btn-xs">Remover</a>
-                                        <a class="btn btn-primary btn-xs">Devolver</a>
-                                    </div>
-                                </div>
-                            </li>
-                            <!-- END timeline item -->
-
-
-                        </ul>
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Editar o item</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
+        
         <!-- /.modal -->
 
 
