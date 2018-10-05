@@ -1,7 +1,6 @@
 {% extends "base.html" %}{% load static %}
 {% block content %}
 
-
 <div class="row">
     <div class="col col-sm-12">
         <form action="" method="get" class="form-horizontal" role="form">
@@ -9,22 +8,33 @@
                 <div class="box-body">
                     <div class="form-group">
                         <label for="solicitante" class="col-sm-2 control-label">Solicitante:</label>
+                        
                         <div class="col-sm-10">
-                            <select name="p" id="pessoa_pesquisada" class="select2 form-control " style="width: 100%;">
+                            {% if not pessoa_pesquisada %}
+                            <select name="p" id="pessoa_pesquisada" class="select2 form-control " style="width: 60%;">
 
-                            </select>
+                            </select>&nbsp;
+                            <a href="#">Cadastrar uma nova pessoa</a>
+                            {% else %}
+                                <p class="form-control">
+                                        <i class="fa fa-user"></i>
+                                    {{ pessoa_pesquisada.nome }} <!--<a href="{%url 'emprestimos' %}"><i class="fa fa-times"></i></a>-->
+                                    <input type="hidden" name="p" value="{{ pessoa_pesquisada.id }}">
+                                </p>
+                            {% endif %}                            
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="busca" class="col-sm-2 control-label">Localizar:</label>
                         <div class="col-sm-10">
-                            <input tabindex="1" type="text" class="form-control" name="ip" id="item_pesquisado"
-                                placeholder="Buscar item" autofocus>
+                            <input type="text" class="form-control" onfocus="this.select();" onmouseup="return false;" name="ip" id="item_pesquisado"
+                                placeholder="Buscar item" autofocus value="{{item_pesquisado_texto}}">
+                            <input type="hidden" name="h" value="{{ historico_pesquisa_texto }}">
                         </div>
                     </div>
                 </div>
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-default">Limpar a busca</button>
+                    <a href="{%url 'emprestimos' %}" class="btn btn-default">Limpar a busca</a>
                     <button type="submit" class="btn btn-info pull-right">Pesquisar</button>
                 </div>
             </div>
@@ -33,6 +43,41 @@
     </div>
 </div>
 
-{% include "part_resultados_busca.html" with itens_pesquisados=itens_pesquisados  %}
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#pessoa_pesquisada').select2({
+            minimumInputLength: 2,
+            ajax: {
+                url: '{% url "pessoa_json" %}',
+                dataType: 'json',
+                type: "GET",
+                quietMillis: 50,
+                data: function (palavra) {
+                    return {
+                        palavra: palavra
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (result) {
+                            return {
+                                text: result.fields.nome,
+                                slug: result.fields.cpf,
+                                id: result.pk
+                            }
+                        })
+                    };
+                }
+            }
+        });
+    });
+
+</script>
+
+
+
+
+{% include "part_resultados_busca.html" with itens_da_pesquisa=itens_da_pesquisa %}
 
 {% endblock content %}

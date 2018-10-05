@@ -1,20 +1,20 @@
 {% load static %}
 <div class="input-group">
     <span class="input-group-addon">
-        <input type="checkbox">
+        <input type="checkbox" class="item_pesquisado" id="item_pesquisado[{{ item.id }}]" data-itemid="{{ item.id }}" >
     </span>
-    <div class="with-border">
+    <div class="with-border" style="border: 1px solid silver; overflow: auto; ">
         <div class="product-img">
             <img src="{% static 'img/default-50x50.gif' %}" alt="{{ item.nome }}">
         </div>
         <div class="product-info">
-            <a data-toggle="modal" data-target="#modal-default" href="javascript:void(0)" class="product-title"
+            <a data-toggle="modal" style="overflow: scroll" data-target="#modal-default" href="javascript:void(0)" class="product-title"
                 data-unsp-sanitized="clean">{{ item.nome }}
-                {{ item.tipo }}
-                <span class="label label-warning pull-right">{{ item.status }}</span></a>
-            <span class="product-description">
-                {{ item.descricao }}
-            </span>
+                {{ item.tipo|default:'' }}
+                <span class="label label-{{ item.status.2 }} pull-right">{{ item.status.1 }}</span></a>
+            <p class="product-description" style="white-space: initial">
+                {{ item.tipo.descricao }}
+            </p>
         </div>
     </div>
 </div>

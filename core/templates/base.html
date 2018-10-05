@@ -245,8 +245,9 @@ desired effect
             </section>
 
             <!-- Main content -->
-            <section class="content container-fluid">
-                
+
+            <noscript>Necessário Javascript</noscript>
+            <section class="content container-fluid" style="display: none">
                 {% block content %} {% endblock content %}
 
             </section>
@@ -280,37 +281,12 @@ desired effect
         <script src="{% static 'adminlte/js/adminlte.min.js' %}"></script>
         <!-- Select2 -->
         <script src="{% static 'select2/dist/js/select2.full.min.js' %}"></script>
-
         <script>
-                $(document).ready(function () {
-                    $('#pessoa_pesquisada').select2({
-                        minimumInputLength: 2,
-                        ajax: {
-                            url: '{% url "pessoa_json" %}',
-                            dataType: 'json',
-                            type: "GET",
-                            quietMillis: 50,
-                            data: function (palavra) {
-                                return {
-                                    palavra: palavra
-                                };
-                            },
-                            processResults: function (data) {
-                                return {
-                                    results: $.map(data, function (result) {
-                                        return {
-                                            text: result.fields.nome,
-                                            slug: result.fields.cpf,
-                                            id: result.pk
-                                        }
-                                    })
-                                };
-                            }
-                        }
-                    });
+                document.addEventListener('DOMContentLoaded', function () {
+                    $('section.container-fluid').show();
                 });
-
-            </script>
+        </script>
+        
 </body>
 
 </html>
