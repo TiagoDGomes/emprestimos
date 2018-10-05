@@ -22,15 +22,11 @@ def emprestimos(request):
         except:
             item_pesquisado_id = None
         if len(item_pesquisado_texto) >= 1: 
-
             try:
                 hps = request.GET['h'].split(',')
             except:
                 hps = []
-            historico_pesquisa = list(map(int, filter(None,hps) ))
-
-                
-            #try:
+            historico_pesquisa = list(map(int, filter(None,hps) ))                
             itens_da_pesquisa = ItemEmprestimo.objects.filter(Q(nome__icontains=item_pesquisado_texto)|Q(id=item_pesquisado_id))
             if len(itens_da_pesquisa) == 1:
                 itens_da_pesquisa = None
@@ -38,18 +34,14 @@ def emprestimos(request):
                 historico_pesquisa.append(item_pesquisado_id)
             else:
                 itens_historico_pesquisa = ItemEmprestimo.objects.filter(id__in=historico_pesquisa)
-            
-            historico_pesquisa_texto = ','.join(hps)
-            print(historico_pesquisa)
+            historico_pesquisa_texto = ','.join(str(x) for x in historico_pesquisa)
+            print(historico_pesquisa_texto)
 
             
             
             
     return render(request, 'emprestimos.html', context=locals()) 
 
-
-def busca(request):
-    pass
 
 
 def pessoa_json(request):
