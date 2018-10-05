@@ -1,0 +1,68 @@
+
+{% if itens_pesquisados %}
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title" data-unsp-sanitized="clean">Itens pesquisados</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <ul class="products-list product-list-in-box">
+            {% for item in itens_pesquisados %}
+
+            <li class="item">
+
+                {% include "part_busca_item.html"  %}
+
+            </li>
+
+            {% endfor %}
+        </ul>
+        <div class="box-footer">
+            <button type="submit" class="btn btn-info"><i class="fa fa-check-square "></i></button>
+            <button type="submit" class="btn btn-warning"><i class="fa fa-square "></i></button>
+            <button type="submit" class="btn btn-default"><i class="fa fa-times "></i></button>
+            <button type="submit" class="btn btn-success pull-right"><i class="fa fa-arrow-up"></i> Emprestar todos os selecionados</button>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% if emprestimos_pessoa %}
+<div class="box box-warning">
+    <div class="box-header with-border">
+        <h3 class="box-title" data-unsp-sanitized="clean">Empréstimos da pessoa solicitante</h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <ul class="products-list product-list-in-box">
+
+
+            <li class="item">
+
+                {% include "part_busca_item.html" %}
+
+            </li>
+
+        </ul>
+        <div class="box-footer">
+            <button type="submit" class="btn btn-info">Selecionar tudo</button>
+            <button type="submit" class="btn btn-warning">Inverter seleção</button>
+            <button type="submit" class="btn btn-success pull-right"><i class="fa fa-arrow-down"></i> Devolver todos os selecionados</button>
+        </div>
+    </div>
+
+</div>
+
+{% endif %}
