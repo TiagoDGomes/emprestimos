@@ -3,7 +3,7 @@
 
 <div class="row">
     <div class="col col-sm-12">
-        <form action="" method="get" class="form-horizontal" role="form">
+        <form action="{% url 'emprestimos' %}" method="get" class="form-horizontal" role="form">
             <div class="box box-default">
                 <div class="box-body">
                     <div class="form-group">
@@ -11,13 +11,11 @@
                         
                         <div class="col-sm-10">
                             {% if not pessoa_pesquisada %}
-                            <select name="p" id="pessoa_pesquisada" class="select2 form-control " style="width: 60%;">
-
-                            </select>&nbsp;
+                            <select name="p" id="pessoa_pesquisada" class="select2 form-control " style="width: 60%;"></select>&nbsp;                            
                             <a href="#">Cadastrar uma nova pessoa</a>
                             {% else %}
                                 <p class="form-control">
-                                        <i class="fa fa-user"></i>
+                                    <i class="fa fa-user"></i>
                                     {{ pessoa_pesquisada.nome }} <!--<a href="{%url 'emprestimos' %}"><i class="fa fa-times"></i></a>-->
                                     <input type="hidden" name="p" value="{{ pessoa_pesquisada.id }}">
                                 </p>
@@ -71,6 +69,7 @@
                 }
             }
         });
+        console.log(jQuery.param);
     });
 
 </script>

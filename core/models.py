@@ -25,11 +25,14 @@ class TipoItem(models.Model):
 
 STATUS = {
     'desconhecido': (0, 'desconhecido', 'default' ),
-    'emprestado': (-1, 'emprestado', 'warning'),
     'atrasado': (-2, 'atrasado', 'danger'),
     'perdido': (-3, 'perdido', 'danger'),
     'quebrado': (-4, 'quebrado', 'danger'),
-    'livre': (1, 'livre', 'success')
+
+    'livre': (1, 'livre', 'success'),
+    'reservado': (11, 'reservado', 'danger'),
+    'emprestado': (12, 'emprestado', 'warning'),
+    
 }
     
 
@@ -52,11 +55,21 @@ class ItemEmprestimo(models.Model):
     
     @property
     def status(self):
-        return STATUS['livre']
+        res_atual = self.reserva_atual
+        if res_atual is None:
+            return STATUS['livre']
+        elif res_atual.data_retirada is not None:            
+            return STATUS['emprestado']
+        else:            
+            return STATUS['reservado']
 
     @property
     def historico(self):
         return None
+
+    @property
+    def reserva_atual(self):
+        return Emprestimo.objects.filter(item=self).filter(data_devolucao__isnull=True).last()
 
 
 class Emprestimo(models.Model):

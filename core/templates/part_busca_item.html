@@ -1,20 +1,28 @@
 {% load static %}
 <div class="input-group">
     <span class="input-group-addon">
-        <input type="checkbox" class="item_pesquisado" id="item_pesquisado[{{ item.id }}]" data-itemid="{{ item.id }}" >
+        <input type="checkbox" class="item_pesquisado" id="it-{{ item.id }}" name="it-{{ item.id }}" data-itemid="{{ item.id }}" >
     </span>
     <div class="with-border" style="border: 1px solid silver; overflow: auto; ">
         <div class="product-img">
-            <img src="{% static 'img/default-50x50.gif' %}" alt="{{ item.nome }}">
+            <img src="{% static 'img/default-50x50.gif' %}" alt="{{ item.nome }}"><br>
+            <span class="label label-{{ item.status.2 }}">{{ item.status.1 }}</span>   
         </div>
         <div class="product-info">
-            <a data-toggle="modal" style="overflow: scroll" data-target="#modal-default" href="javascript:void(0)" class="product-title"
-                data-unsp-sanitized="clean">{{ item.nome }}
-                {{ item.tipo|default:'' }}
-                <span class="label label-{{ item.status.2 }} pull-right">{{ item.status.1 }}</span></a>
             <p class="product-description" style="white-space: initial">
                 {{ item.tipo.descricao }}
             </p>
+            {% if item.status.0 == 1 %}
+            <p class="pull-right">
+                <a class="btn btn-success btn-xs" href="#">Emprestar agora</a>
+            </p>
+            {% elif item.status.0 >= 11 %}
+            <p class="pull-right">
+                <a class="btn btn-danger btn-xs" href="#">Devolver agora</a>
+            </p>
+            {% endif %}
         </div>
+        
+        
     </div>
 </div>
