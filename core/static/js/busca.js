@@ -6,7 +6,7 @@ function buscar_item(text) {
     }
     if (text.length > 0) {
         console.log("buscar_item", text);
-        get_json("busca.json?texto=" + text, tratar_resultado_busca);
+        get_json(URL_BUSCA + "?texto=" + text, tratar_resultado_busca);
     }
 }
 
