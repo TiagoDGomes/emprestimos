@@ -41,7 +41,9 @@ class ItemEmprestimo(models.Model):
     codigo = models.CharField(max_length=50, unique=True, null=True, blank=True)
     observacoes = models.TextField(null=True, blank=True)
     tipo = models.ForeignKey(TipoItem, null=True, blank=True, on_delete=models.CASCADE)
-    horas_utilizacao_limite = models.IntegerField(null=True, blank=True)
+    horas_utilizacao_limite = models.IntegerField(null=True, blank=True, help_text="Defina o tempo máximo permitido para utilização")
+    quantidade_total = models.IntegerField(null=True, blank=True, default=1, help_text="Defina a quantidade existente para este item. Para bens patrimoniados, utilize o valor 1")
+    palavras_chave = models.TextField(null=True, blank=True, help_text="Várias palavras separadas por espaços que auxiliam na busca")
 
     class Meta:
         verbose_name = 'item para empréstimo'

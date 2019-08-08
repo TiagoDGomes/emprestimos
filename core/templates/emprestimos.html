@@ -1,82 +1,268 @@
-{% extends "base.html" %}{% load static %}
-{% block content %}
+{%load static %}
+<!DOCTYPE html>
+<html>
 
-<div class="row">
-    <div class="col col-sm-12">
-        <form action="{% url 'emprestimos' %}" method="get" class="form-horizontal" role="form">
-            <div class="box box-default">
-                <div class="box-body">
-                    <div class="form-group">
-                        <label for="solicitante" class="col-sm-2 control-label">Solicitante:</label>
-                        
-                        <div class="col-sm-10">
-                            {% if not pessoa_pesquisada %}
-                            <select name="p" id="pessoa_pesquisada" class="select2 form-control " style="width: 60%;"></select>&nbsp;                            
-                            <a href="#">Cadastrar uma nova pessoa</a>
-                            {% else %}
-                                <p class="form-control">
-                                    <i class="fa fa-user"></i>
-                                    {{ pessoa_pesquisada.nome }} <!--<a href="{%url 'emprestimos' %}"><i class="fa fa-times"></i></a>-->
-                                    <input type="hidden" name="p" value="{{ pessoa_pesquisada.id }}">
-                                </p>
-                            {% endif %}                            
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="busca" class="col-sm-2 control-label">Localizar:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" onfocus="this.select();" onmouseup="return false;" name="ip" id="item_pesquisado"
-                                placeholder="Buscar item" autofocus value="{{item_pesquisado_texto}}">
-                            <input type="hidden" name="h" value="{{ historico_pesquisa_texto }}">
-                        </div>
-                    </div>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>SISTEMA</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="{% static 'bootstrap-4.0.0/css/bootstrap.min.css' %}">
+    <script src="main.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="{% static 'css/geral.css' %}">
+    <style>
+        *,
+        ::after,
+        ::before {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            /*overflow: hidden;*/
+            font-family: "Lato", sans-serif;
+        }
+
+        #menu_guia {
+            width: 16%;
+            background: #292929;
+
+        }
+
+        @media (min-width: 768px) {
+
+            #menu_guia,
+            .conteudo {
+                min-height: 100vh;
+            }
+        }
+
+        #pesquisa_produto {
+            padding-top: 1em;
+            display: inline-block;
+        }
+
+        .pesquisa * {
+            font-size: 2em;
+            margin-bottom: 1em;
+        }
+
+        .pesquisa input {
+            width: 100%
+        }
+
+        .resultado {
+            background-color: white;
+        }
+
+        .resultado .btn {
+            min-width: 3em;
+            min-height: 2em;
+        }
+
+        .resultado .nome {
+            width: 65%;
+        }
+
+        .resultado td:last-child {
+            text-align: right;
+            vertical-align: middle;
+        }
+
+        .adicionados {
+            position: relative;
+        }
+
+        .responsavel {
+            margin-bottom: 1em;
+        }
+
+        #main {
+            padding-left: 0;
+        }
+    </style>
+    <script>
+        function buscar_item(text) {
+            var resultado = document.querySelectorAll("body");
+
+            for (i = 0; i < resultado.length; i++) {
+                console.log(resultado[i]);
+            }
+            if (text.length > 0) {
+                console.log("buscar_item", text);
+                get_json("resultado.json?texto=" + text, tratar_resultado_busca);
+            }
+        }
+
+        function tratar_resultado_busca(json) {
+            console.log("tratar_resultado_busca", json);
+        }
+        document.addEventListener('keydown', function (event) {
+            switch (event.keyCode) {
+                case 13: //ENTER
+                case 27: //ESC
+                case 112: //F1
+                case 113:
+                case 114:
+                case 115:
+                    //case 116:
+                case 117:
+                case 118:
+                case 119:
+                case 120:
+                case 121:
+                    //case 122:
+                case 123: //F12
+                    //case 37: // ESQUERDA
+                case 38: // CIMA
+                    //case 39: // DIREITA
+                case 40: // BAIXO
+                    event.preventDefault();
+
+                default:
+                    console.log(event.keyCode);
+            }
+
+        });
+    </script>
+</head>
+
+<body>
+    <div id="main" class="container-fluid">
+        <div class="row">
+            <div id="menu_guia" class="col-md-2 col-12 ">
+
+            </div>
+            <div id="pesquisa_produto" class="conteudo col-md-10 col-12">
+                <h2>
+
+                </h2>
+                <div class="pesquisa">
+                    <input type="text" id="item_pesquisa" autofocus onkeyup="buscar_item(this.value)" placeholder="">
                 </div>
-                <div class="box-footer">
-                    <a href="{%url 'emprestimos' %}" class="btn btn-default">Limpar a busca</a>
-                    <button type="submit" class="btn btn-info pull-right">Pesquisar</button>
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-7 col-12 resultado">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Cód.</th>
+                                            <th class="nome">Nome</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td>bv123456</td>
+                                            <td>FULANO DE TAL
+                                                <br>
+                                                <small>Aluno do Técnico Integrado em Informática</small>
+                                            </td>
+                                            <td>
+                                                <a href="#" title="Responsável por retirar"
+                                                    class="btn btn-outline-dark btn-sm">&searr;</a>
+
+                                                <a href="#" title="Responsável pelo empréstimo"
+                                                    class="btn btn-outline-dark btn-sm">&nearr;</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>10U</td>
+                                            <td>CAPACITOR DE 10uF</td>
+                                            <td>
+
+
+                                                <a href="#" title="Devolução agora"
+                                                    class="btn btn-outline-primary btn-sm">&darr;</a>
+                                                    <a href="#" title="Adicionar para lista"
+                                                        class="btn btn-outline-success btn-sm">&rarr;</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>LABA1</td>
+                                            <td>LABORATÓRIO DE INFORMÁTICA 1 - BLOCO A</td>
+                                            <td>
+                                                <a href="#" title="Reservar"
+                                                    class="btn btn-outline-success btn-sm">📆</a>
+                                                <a href="#" title="Devolução agora"
+                                                    class="btn btn-outline-primary btn-sm">&darr;</a>
+
+                                                <a href="#" title="Adicionar para lista"
+                                                    class="btn btn-outline-success btn-sm">&rarr;</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>SALA1</td>
+                                            <td>SALA 1 - BLOCO A</td>
+
+                                            <td>
+                                                <a href="#" title="Reservar"
+                                                    class="btn btn-outline-success btn-sm">📆</a>
+
+                                                <a href="#" title="Adicionar para lista"
+                                                    class="btn btn-outline-success btn-sm">&rarr;</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>555555</td>
+                                            <td>OS LUSÍADAS</td>
+                                            <td>
+                                                <a href="#" title="Adicionar para espera"
+                                                    class="btn btn-outline-success btn-sm">🗒</a>
+                                                <a href="#" title="Devolução agora"
+                                                    class="btn btn-outline-primary btn-sm">&darr;</a>
+
+                                                <a href="#" title="Adicionar para lista"
+                                                    class="btn btn-outline-success btn-sm">&rarr;</a>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>CI-0001</td>
+                                            <td>COMPUTADOR INTERATIVO</td>
+                                            <td>
+                                                <a href="#" title="Reservar"
+                                                    class="btn btn-outline-success btn-sm">📆</a>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-12 adicionados">
+                            <div class="responsavel card">
+                                <div class="card-header">{{tipo_pessoa}}</div>
+                                <div class="card-body">&nbsp;</div>
+                                <div class="card-footer">&nbsp;</div>
+                            </div>
+
+
+                            <div class="table-responsive table-sm">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Data/Hora</th>
+                                            <th class="w-75">Item</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-
-        </form>
+        </div>
     </div>
-</div>
 
-<script>
-    
-    document.addEventListener('DOMContentLoaded', function () {
-        $('#pessoa_pesquisada').select2({
-            minimumInputLength: 2,
-            ajax: {
-                url: '{% url "pessoa_json" %}',
-                dataType: 'json',
-                type: "GET",
-                quietMillis: 50,
-                data: function (palavra) {
-                    return {
-                        palavra: palavra
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: $.map(data, function (result) {
-                            return {
-                                text: result.fields.nome,
-                                slug: result.fields.cpf,
-                                id: result.pk
-                            }
-                        })
-                    };
-                }
-            }
-        });
-        console.log(jQuery.param);
-    });
+</body>
 
-</script>
-
-
-
-
-{% include "part_resultados_busca.html" with itens_da_pesquisa=itens_da_pesquisa %}
-
-{% endblock content %}
+</html>
