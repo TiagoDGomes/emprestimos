@@ -77,6 +77,13 @@ class Pessoa(models.Model):
     def __str__(self):
         return self.nome
 
+    @property
+    def bloqueio(self):
+        if self.bloquear_emprestimos_ate:
+            now = timezone.now()
+            if self.bloquear_emprestimos_ate >= now.date():
+                return self.bloquear_emprestimos_ate.isoformat()
+        return None
 
 class TipoItem(models.Model):
     nome = models.CharField(max_length=255)

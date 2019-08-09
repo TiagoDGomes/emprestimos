@@ -19,11 +19,16 @@ function tratar_resultado_busca(json) {
     var tr = document.createElement('tr'); // Linha
     tabela.appendChild(tr);
     for (i = 0; i < json.pessoas.length; i++){
+        var pessoa = json.pessoas[i];
         var td_codigo = document.createElement('td'); // celula código
         var td_nome =  document.createElement('td'); // celula nome
-        var td_detalhes =  document.createElement('td'); // celula nome
-        td_codigo.innerHTML = json.pessoas[i].matricula;
-        td_nome.innerHTML = json.pessoas[i].nome;
+        var td_detalhes =  document.createElement('td'); // celula detalhes
+        td_codigo.innerHTML = pessoa.matricula;
+        td_nome.innerHTML = pessoa.nome;
+        
+        if (pessoa.bloqueio != null){
+            td_nome.style.textDecoration = 'line-through'
+        }
         tr.appendChild(td_codigo);
         tr.appendChild(td_nome);
         tr.appendChild(td_detalhes); 
