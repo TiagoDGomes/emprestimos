@@ -1,0 +1,32 @@
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    /*overflow: hidden;*/
+    font-family: "Lato", sans-serif;
+}
+
+#menu_guia {
+    width: 16%;
+    background: #292929;
+
+}
+
+@media (min-width: 768px) {
+
+    #menu_guia,
+    .conteudo {
+        min-height: 100vh;
+    }
+}
+
+
+
+#main {
+    padding-left: 0;
+}

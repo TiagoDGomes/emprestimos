@@ -1,0 +1,39 @@
+#pesquisa_produto {
+    padding-top: 1em;
+    display: inline-block;
+}
+
+.pesquisa * {
+    font-size: 2em;
+    margin-bottom: 1em;
+}
+
+.pesquisa input {
+    width: 100%
+}
+
+.resultado {
+    background-color: white;
+}
+
+.resultado .btn {
+    min-width: 3em;
+    min-height: 2em;
+}
+
+.resultado .nome {
+    width: 65%;
+}
+
+.resultado td:last-child {
+    text-align: right;
+    vertical-align: middle;
+}
+
+.adicionados {
+    position: relative;
+}
+
+.responsavel {
+    margin-bottom: 1em;
+}

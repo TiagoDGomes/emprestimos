@@ -8,87 +8,13 @@
     <title>SISTEMA</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="{% static 'bootstrap-4.0.0/css/bootstrap.min.css' %}">
-    <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
     <link rel="stylesheet" href="{% static 'css/geral.css' %}">
+    <link rel="stylesheet" href="{% static 'css/busca.css' %}">
     <script>
         var URL_BUSCA = '{% url 'resultado_busca' %}';
     </script>
-    <script src="{% static 'js/busca.js' %}" type="text/javascript"></script>
-    <style>
-        *,
-        ::after,
-        ::before {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            /*overflow: hidden;*/
-            font-family: "Lato", sans-serif;
-        }
-
-        #menu_guia {
-            width: 16%;
-            background: #292929;
-
-        }
-
-        @media (min-width: 768px) {
-
-            #menu_guia,
-            .conteudo {
-                min-height: 100vh;
-            }
-        }
-
-        #pesquisa_produto {
-            padding-top: 1em;
-            display: inline-block;
-        }
-
-        .pesquisa * {
-            font-size: 2em;
-            margin-bottom: 1em;
-        }
-
-        .pesquisa input {
-            width: 100%
-        }
-
-        .resultado {
-            background-color: white;
-        }
-
-        .resultado .btn {
-            min-width: 3em;
-            min-height: 2em;
-        }
-
-        .resultado .nome {
-            width: 65%;
-        }
-
-        .resultado td:last-child {
-            text-align: right;
-            vertical-align: middle;
-        }
-
-        .adicionados {
-            position: relative;
-        }
-
-        .responsavel {
-            margin-bottom: 1em;
-        }
-
-        #main {
-            padding-left: 0;
-        }
-    </style>
-    <script>
-
-    </script>
+    <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/busca.js' %}" type="text/javascript"></script>    
 </head>
 
 <body>
@@ -102,7 +28,7 @@
 
                 </h2>
                 <div class="pesquisa">
-                    <input type="text" id="item_pesquisa" autofocus onkeyup="buscar_item(this.value)" placeholder="">
+                    <input type="text" id="item_pesquisa" autofocus onkeyup="buscar_item(this)" placeholder="">
                 </div>
 
                 <div class="container-fluid">
@@ -118,8 +44,8 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody>
-                                        <tr>
+                                    <tbody id="tabela-resultado-corpo">
+                                        <!--<tr>
                                             <td>bv123456</td>
                                             <td>FULANO DE TAL
                                                 <br>
@@ -192,7 +118,7 @@
                                                     class="btn btn-outline-success btn-sm">📆</a>
 
                                             </td>
-                                        </tr>
+                                        </tr>-->
                                     </tbody>
                                 </table>
                             </div>

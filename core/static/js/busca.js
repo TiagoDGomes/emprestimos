@@ -1,17 +1,33 @@
-function buscar_item(text) {
+var busca_em_execucao = false;
+function buscar_item(obj_input) {
     var resultado = document.querySelectorAll("body");
 
-    for (i = 0; i < resultado.length; i++) {
-        console.log(resultado[i]);
-    }
-    if (text.length > 0) {
-        console.log("buscar_item", text);
-        get_json(URL_BUSCA + "?texto=" + text, tratar_resultado_busca);
+    if (obj_input.value.length > 0 && busca_em_execucao == false) {
+        console.log("buscar_item", obj_input.value);
+        busca_em_execucao = true;
+        setTimeout(function(){            
+            get_json(URL_BUSCA + "?texto=" + obj_input.value, tratar_resultado_busca);
+        },700);        
     }
 }
 
 function tratar_resultado_busca(json) {
+    busca_em_execucao = false;
     console.log("tratar_resultado_busca", json);
+    var tabela = document.getElementById('tabela-resultado-corpo');
+    tabela.innerHTML = '';
+    var tr = document.createElement('tr'); // Linha
+    tabela.appendChild(tr);
+    for (i = 0; i < json.pessoas.length; i++){
+        var td_codigo = document.createElement('td'); // celula código
+        var td_nome =  document.createElement('td'); // celula nome
+        var td_detalhes =  document.createElement('td'); // celula nome
+        td_codigo.innerHTML = json.pessoas[i].matricula;
+        td_nome.innerHTML = json.pessoas[i].nome;
+        tr.appendChild(td_codigo);
+        tr.appendChild(td_nome);
+        tr.appendChild(td_detalhes); 
+    }   
 }
 document.addEventListener('keydown', function (event) {
     switch (event.keyCode) {
