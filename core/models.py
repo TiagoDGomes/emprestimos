@@ -1,12 +1,26 @@
 import datetime
+from datetime import timedelta
 from os.path import normcase
 
 from django.db import models
 from django.db.models import Q
+from django.db.models.fields import IntegerField
 from django.utils import timezone
 from localflavor.br.validators import BRCPFValidator
+from nbformat import ValidationError
 
-STATUS_ITEM = dict(
+STATUS_ITEM = dict(    
+    
+    problema_registro=dict(
+        code=-6,
+        verbose='problema no registro',
+        attr_class='danger'
+    ),
+    multiplo_ocupado=dict(
+        code=-5,
+        verbose='todos em uso',
+        attr_class='warning'
+    ),
     quebrado=dict(
         code=-4,
         verbose='quebrado',
@@ -118,7 +132,7 @@ class ItemEmprestimo(models.Model):
     reserva_por_fila = models.BooleanField(
         null=True, default=False, help_text='Permite apenas reserva por fila de espera'
     )
-
+    bloqueio_minutos_antes = models.IntegerField(null=True, blank=True, default=60, help_text='Impede de reservar minutos antes da próxima reserva (não tem efeito para item com quantidade total maior que 1)')
     class Meta:
         verbose_name = 'item para empréstimo'
         verbose_name_plural = 'itens para empréstimo'
@@ -126,8 +140,23 @@ class ItemEmprestimo(models.Model):
     def __str__(self):
         return self.nome
 
-    def reservar(self, pessoa_responsavel, data_retirada_programada, data_devolucao_programada=None, observacoes='', retirada_na_hora=False):
-        pass
+    def fazer_reserva(self, pessoa_responsavel, data_retirada_programada=None, data_devolucao_programada=None, observacoes='', quantidade=1):
+        reservas = []
+        for _ in range(quantidade):
+            emprestimo = Emprestimo.objects.create(item=self, pessoa_responsavel=pessoa_responsavel)
+            emprestimo.data_hora_inicio = data_retirada_programada
+            if data_devolucao_programada is not None:
+                emprestimo.data_hora_fim = data_devolucao_programada
+            emprestimo.save()
+            reservas.append(emprestimo)
+        return reservas
+
+    def pedir_agora(self, pessoa_responsavel, data_devolucao_programada=None, observacoes='', quantidade=1):
+        return self.fazer_reserva(pessoa_responsavel, timezone.now(), data_devolucao_programada, observacoes, quantidade)
+
+    
+
+    
 
     @property
     def status(self):
@@ -137,17 +166,15 @@ class ItemEmprestimo(models.Model):
         now = timezone.now()
         status_utilizacao = {}
         if self.quantidade_total > 1:
-            key = 'multiplo'
             status_utilizacao['utilizado'] = len(self.reserva_atual)
             status_utilizacao['restante'] = self.quantidade_total - len(self.reserva_atual)
+            key = 'multiplo' if status_utilizacao['restante'] > 0 else 'multiplo_ocupado'           
             
         elif not self.reserva_atual:
             key = 'disponivel'
-        else:
-            print(self.reserva_atual)
+        else:            
             res_atual = self.reserva_atual[0]
             key = 'desconhecido'
-            print(res_atual.data_hora_inicio)
             status_utilizacao = dict(
                 utilizador_nome=res_atual.pessoa_responsavel.nome,
                 utilizador_matricula=res_atual.pessoa_responsavel.matricula,
@@ -156,6 +183,7 @@ class ItemEmprestimo(models.Model):
                 key = 'fila'
             else:
                 if res_atual.data_hora_inicio is None or res_atual.data_hora_fim is None:
+                    key = 'problema_registro'
                     status_utilizacao['data_hora_valida'] = False
                 else:
                     status_utilizacao['data_hora_valida'] = True
@@ -163,6 +191,10 @@ class ItemEmprestimo(models.Model):
                     status_utilizacao['data_hora_fim'] = res_atual.data_hora_fim.isoformat()
                     if res_atual.data_hora_inicio > now:  # se nao iniciou
                         key = 'disponivel'
+                        hora_bloqueio = res_atual.data_hora_inicio - timedelta(minutes=self.bloqueio_minutos_antes)
+                        print((res_atual.data_hora_inicio, hora_bloqueio))
+                        if hora_bloqueio <= now:
+                            key = 'reservado'
                     else:
                         key = 'utilizado'
                         if res_atual.data_hora_fim < now:  # se acabou
@@ -173,7 +205,7 @@ class ItemEmprestimo(models.Model):
                         elif self.necessita_confirmacao_retirada:
                             if res_atual.data_retirada is None:
                                 key = 'ret_atrasada'
-
+                                    
         z = status_utilizacao.copy()
         z.update(STATUS_ITEM[key])
         return z
@@ -198,7 +230,7 @@ class Emprestimo(models.Model):
     pessoa_retirada = models.ForeignKey(
         Pessoa, null=True, blank=True, on_delete=models.CASCADE, related_name='pessoa_retirada', verbose_name='Pessoa a retirar')
     data_hora_inicio = models.DateTimeField(
-        null=True, blank=True, verbose_name='Data/hora de início')
+        null=True, blank=False, verbose_name='Data/hora de início',)
     data_hora_fim = models.DateTimeField(
         null=True, blank=True, verbose_name='Data/hora de término')
     data_retirada = models.DateTimeField(
@@ -216,5 +248,15 @@ class Emprestimo(models.Model):
     def fazer_retirada(self, pessoa_retirada, data_retirada=datetime.datetime.now, observacoes=''):
         pass
 
-    def fazer_devolucao(self, data_devolucao=datetime.datetime.now, observacoes=''):
-        pass
+    def fazer_devolucao(self, data_devolucao=None, observacoes=''):
+        if not data_devolucao:
+            data_devolucao = timezone.now()
+        self.data_devolucao = data_devolucao
+        self.save()
+
+    '''def __init__(self, *args, **kwargs):
+        super(Emprestimo, self).__init__(*args, **kwargs)
+        self.fields['data_hora_inicio'].validators=[self._validator_data_hora_inicio]
+    def _validator_data_hora_inicio(self, value):
+        if self.item.reserva_por_fila:
+            raise ValidationError('Não é possivel definir uma data de início com item que deve ser reservado por fila')'''
