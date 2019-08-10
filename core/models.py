@@ -1,10 +1,10 @@
 import datetime
-from django.utils import timezone
 from os.path import normcase
 
 from django.db import models
 from django.db.models import Q
-from localflavor.br.forms import BRCPFField
+from django.utils import timezone
+from localflavor.br.validators import BRCPFValidator
 
 STATUS_ITEM = dict(
     quebrado=dict(
@@ -67,12 +67,12 @@ STATUS_ITEM = dict(
 
 class Pessoa(models.Model):
     nome = models.CharField(max_length=125)
-    cpf = BRCPFField()
+    cpf = models.CharField(max_length=14, null=True, blank=True, validators=[BRCPFValidator(),], verbose_name='CPF')
     matricula = models.CharField(
         max_length=35, unique=True, null=True, blank=True)
     detalhes = models.TextField(null=True, blank=True,)
-    observacao = models.TextField(null=True, blank=True,)
-    bloquear_emprestimos_ate = models.DateField(null=True, blank=True,)
+    observacao = models.TextField(null=True, blank=True, verbose_name='observação')
+    bloquear_emprestimos_ate = models.DateField(null=True, blank=True, verbose_name='bloquear empréstimos até',)
 
     def __str__(self):
         return self.nome
