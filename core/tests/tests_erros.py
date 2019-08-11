@@ -1,25 +1,31 @@
 
-import json
 
-from django.test import TestCase
-from django.urls.base import reverse
-import datetime
-from django.utils import timezone
+from .base import TestCaseBase
+from django.core.exceptions import ValidationError
 
 
-from core.models import ItemEmprestimo, Pessoa, TipoItem, Emprestimo, STATUS_ITEM
+class TestErros(TestCaseBase):
+    def test_reserva_pessoa_bloqueada(self):
+        self.pessoa.bloquear_emprestimos_ate = self.amanha_hora_1.date()
+        self.pessoa.save()
+        with self.assertRaises(ValidationError):
+            self.sala.pedir_agora(self.pessoa)
 
-def TestErros(TestCase):
-    self.pessoa = Pessoa.objects.create(
-        nome="FULANO DE TAL", matricula="A98765")
-    self.pessoa.cpf = '12345678909'
-    self.pessoa.save()
-    tipo_item = TipoItem.objects.create()
-    tipo_item.nome = 'SALA'
-    tipo_item.save()
-    self.item = ItemEmprestimo.objects.create()
-    self.item.tipo = tipo_item
-    self.item.nome = 'SALA DE AULA 1 - BLOCO A'
-    self.item.codigo = 'A1'
-    self.item.palavras_chave = 'SL1A BLA1S'
-    self.item.save()
+    def test_devolucao_ontem(self):
+        reservas = self.sala.pedir_agora(self.pessoa)
+        with self.assertRaises(ValidationError):
+            reservas[0].fazer_devolucao(self.ontem_hora_1)
+
+    def test_reservar_devolucao_ontem(self):
+        with self.assertRaises(ValidationError):
+            self.sala.fazer_reserva(self.pessoa, self.amanha_hora_2, self.amanha_hora_1)        
+        
+    def test_cpf_invalido(self):
+        self.pessoa.cpf = '12345678900'
+        with self.assertRaises(ValidationError):
+            self.pessoa.save()
+
+    def test_reservar_item_fila(self):
+        self.sala.reserva_por_fila = True
+        with self.assertRaises(ValidationError):
+            self.sala.fazer_reserva(self.pessoa, self.amanha_hora_1,)

@@ -31,13 +31,13 @@ class TestBuscaPadrao(TestCaseBase):
         self.assertIsNone(response['pessoas'][0]['bloqueio'])
 
     def test_busca_pessoa_bloqueada(self):
-        self.pessoa.bloquear_emprestimos_ate = datetime.datetime.now()
+        self.pessoa.bloquear_emprestimos_ate = self.amanha_hora_1
         self.pessoa.save()
         response = self.busca_pessoa()
         self.assertIsNotNone(response['pessoas'][0]['bloqueio'])
 
     def test_busca_pessoa_desbloqueada(self):
-        self.pessoa.bloquear_emprestimos_ate = datetime.datetime.now() - datetime.timedelta(days=1)
+        self.pessoa.bloquear_emprestimos_ate = self.ontem_hora_1
         self.pessoa.save()
         response = self.busca_pessoa()
         self.assertIsNone(response['pessoas'][0]['bloqueio'])
