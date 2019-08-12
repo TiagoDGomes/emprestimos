@@ -37,3 +37,6 @@
 .responsavel {
     margin-bottom: 1em;
 }
+tr.selecionado{
+    background-color: Highlight;
+}
