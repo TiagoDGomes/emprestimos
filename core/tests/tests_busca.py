@@ -36,7 +36,7 @@ class TestBuscaPadrao(TestCaseBase):
         self.assertEqual(response['pessoas'][0]['reservas'][0]['item'], self.sala.nome)
         self.assertEqual(response['pessoas'][0]['reservas'][0]['id'], reservas[0].id)
         self.assertEqual(response['pessoas'][0]['reservas'][0]['item_id'], self.sala.id)
-        self.assertEqual(response['pessoas'][0]['reservas'][0]['data_hora_fim'], reservas[0].data_hora_fim)
+        self.assertEqual(response['pessoas'][0]['reservas'][0]['data_hora_fim'], reservas[0].data_hora_fim.isoformat())
 
 
     def test_busca_pessoa_bloqueada(self):
@@ -75,6 +75,7 @@ class TestBuscaPadrao(TestCaseBase):
     def test_item_codigo(self):
         response = self.busca(self.sala.codigo)
         self.assertEqual(response['itens'][0]['nome'], self.sala.nome)
+        self.assertEqual(len(response['itens']), 1)
 
     def test_item_palavra_chave(self):
         response = self.busca(self.sala.palavras_chave.split(' ')[0])
@@ -132,7 +133,10 @@ class TestBuscaItemUnitario(TestCaseBase):
         response = self.busca_sala()  
         self.assertEqual(response['itens'][0]['status']['code'], STATUS_ITEM['fila']['code'])
     
-
+    def test_ja_escolhido(self):
+        response = self.busca(self.sala.codigo, self.sala.id)
+        print (response)
+        self.assertEqual(len(response['itens']), 0)
 
 class TesteBuscaItemMulti(TestCaseBase):
        

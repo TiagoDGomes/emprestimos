@@ -24,7 +24,7 @@ class TestCaseBase(TestCase):
         self.sala.tipo = tipo_item
         self.sala.nome = 'SALA DE AULA 1 - BLOCO A'
         self.trecho_item_nome = 'SALA'
-        self.sala.codigo = 'A1'
+        self.sala.codigo = 'SA1'
         self.sala.palavras_chave = 'SL1A BLA1S'
         self.trecho_palavra_chave = 'SL1A'
         self.sala.save()
@@ -46,9 +46,9 @@ class TestCaseBase(TestCase):
         self.lapis.palavras_chave = 'SL1A BLA1S'
         self.lapis.save()  
 
-    def busca(self, texto=''):
-        response = json.loads(self.client.get(reverse('resultado_busca'), dict(texto=texto)).content)
-        return (response)
+    def busca(self, texto='', exc_p='', exc_i=''):
+        response = json.loads(self.client.get(reverse('resultado_busca'), dict(texto=texto, exc_p=exc_p, exc_i=exc_i)).content)
+        return (response)    
 
     def busca_pessoa(self):
         return self.busca(self.pessoa.nome)

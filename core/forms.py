@@ -43,11 +43,17 @@ class ReservaForm(forms.Form):
 
 class BuscaForm(forms.Form):
     texto = forms.CharField(required=False,)
+    exc_p = forms.CharField(required=False,)
+    exc_i = forms.CharField(required=False,)
     def fazer_busca(self):
         response = {}
         try:
             texto = self.cleaned_data['texto']
-            if texto != '':
+            if texto != '':                
+                try:
+                    excecao_pessoas = [ int(x) for x in self.cleaned_data['exc_p'].split(',') ]
+                except:
+                    excecao_pessoas = []
                 pesquisa_pessoa = [{'nome': x.nome,
                                     'matricula': x.matricula,
                                     'detalhes': x.detalhes,
@@ -56,14 +62,19 @@ class BuscaForm(forms.Form):
                                     'reservas': x.reservas_atuais}
                                    for x in Pessoa.objects.filter(Q(nome__contains=texto) |
                                                                   Q(matricula=texto) |
-                                                                  Q(cpf=texto))]
+                                                                  Q(cpf=texto)
+                                                                  ).exclude(id__in=excecao_pessoas)]
                 
+                try:
+                    excecao_itens = [ int(x) for x in self.cleaned_data['exc_p'].split(',') ]
+                except:
+                    excecao_itens = []
                 pesquisa_itens = [{'codigo': x.codigo,
                                    'nome': x.nome,
                                    'status': x.status}
                                   for x in ItemEmprestimo.objects.filter(Q(nome__contains=texto) |
                                                                          Q(palavras_chave__contains=texto) |
-                                                                         Q(codigo__contains=texto))]
+                                                                         Q(codigo__contains=texto)).exclude(id__in=excecao_itens)]
                 response = dict(texto=texto,
                                 pessoas=pesquisa_pessoa,
                                 itens=pesquisa_itens)
