@@ -1,4 +1,5 @@
 import datetime
+import json
 from datetime import timedelta
 from os.path import normcase
 
@@ -12,27 +13,27 @@ from django.core.exceptions import ValidationError
 STATUS_ITEM = dict(    
     
     problema_registro=dict(
-        code=-6,
+        code=-7,
         verbose='problema no registro',
         attr_class='danger'
     ),
     multiplo_ocupado=dict(
-        code=-5,
+        code=-6,
         verbose='todos em uso',
         attr_class='warning'
     ),
     quebrado=dict(
-        code=-4,
+        code=-5,
         verbose='quebrado',
         attr_class='danger'
     ),
     perdido=dict(
-        code=-3,
+        code=-4,
         verbose='perdido',
         attr_class='danger'
     ),
     devol_atrasada=dict(
-        code=-2,
+        code=-3,
         verbose='devolução atrasada',
         attr_class='danger'
     ),
@@ -103,6 +104,13 @@ class Pessoa(models.Model):
         self.full_clean()
         super(Pessoa, self).save(*args, **kwargs)
 
+    @property
+    def reservas_atuais(self):
+        reservas = self.emprestimos.filter(Q(data_devolucao__lt=timezone.now())|
+                            (Q(data_hora_fim__gt=timezone.now())&Q(item__necessita_confirmacao_devolucao=True)))
+        
+        return [{'item': x.item.nome, 'item_id': x.item.id, 'id': x.id, 'data_hora_fim': x.data_hora_fim.isoformat()} for x in reservas]
+
 class TipoItem(models.Model):
     nome = models.CharField(max_length=255)
     descricao = models.TextField(null=True, blank=True,)
@@ -137,17 +145,24 @@ class ItemEmprestimo(models.Model):
         null=True, default=False, help_text='Permite apenas reserva por fila de espera'
     )
     bloqueio_minutos_antes = models.IntegerField(null=True, blank=True, default=60, help_text='Impede de reservar minutos antes da próxima reserva (não tem efeito para item com quantidade total maior que 1)')
+    
     class Meta:
         verbose_name = 'item para empréstimo'
         verbose_name_plural = 'itens para empréstimo'
 
+
     def __str__(self):
         return self.nome
+
 
     def fazer_reserva(self, pessoa_responsavel, data_hora_inicio=None, data_hora_fim=None, observacoes='', quantidade=1):
         reservas = []
         if pessoa_responsavel.bloqueio:
             raise ValidationError('Pessoa bloqueada')
+        print(('fazer reserva', self.quantidade_total, self.status['code']))
+        if self.quantidade_total == 1 and (self.status['code'] < 1 or self.status['code'] > 10):
+            print(('fazer reserva', self.status))
+            raise ValidationError("Não é possível reservar. Status: {}".format(self.status['verbose']))
         for _ in range(quantidade):
             emprestimo = Emprestimo.objects.create(item=self, pessoa_responsavel=pessoa_responsavel)
             emprestimo.data_hora_inicio = data_hora_inicio
@@ -156,6 +171,7 @@ class ItemEmprestimo(models.Model):
             emprestimo.save()
             reservas.append(emprestimo)
         return reservas
+
 
     def pedir_agora(self, pessoa_responsavel, data_hora_fim=None, observacoes='', quantidade=1):
         return self.fazer_reserva(pessoa_responsavel, timezone.now(), data_hora_fim, observacoes, quantidade)
@@ -231,7 +247,7 @@ class ItemEmprestimo(models.Model):
 class Emprestimo(models.Model):
     item = models.ForeignKey(ItemEmprestimo, on_delete=models.CASCADE)
     pessoa_responsavel = models.ForeignKey(
-        Pessoa, on_delete=models.CASCADE, related_name='responsavel', verbose_name='Pessoa responsável')
+        Pessoa, on_delete=models.CASCADE, related_name='emprestimos', verbose_name='Pessoa responsável')
     pessoa_retirada = models.ForeignKey(
         Pessoa, null=True, blank=True, on_delete=models.CASCADE, related_name='pessoa_retirada', verbose_name='Pessoa a retirar')
     data_hora_inicio = models.DateTimeField(

@@ -52,10 +52,12 @@ class BuscaForm(forms.Form):
                                     'matricula': x.matricula,
                                     'detalhes': x.detalhes,
                                     'observacao': x.observacao,
-                                    'bloqueio': x.bloqueio}
+                                    'bloqueio': x.bloqueio,
+                                    'reservas': x.reservas_atuais}
                                    for x in Pessoa.objects.filter(Q(nome__contains=texto) |
                                                                   Q(matricula=texto) |
                                                                   Q(cpf=texto))]
+                
                 pesquisa_itens = [{'codigo': x.codigo,
                                    'nome': x.nome,
                                    'status': x.status}

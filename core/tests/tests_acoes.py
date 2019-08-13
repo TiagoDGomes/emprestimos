@@ -20,7 +20,6 @@ class TestAcoes(TestCaseBase):
                 ),
                 
             ]))
-
         self.client.post(reverse('fazer_reserva'), data={'info': info})
         self.assertEqual(len(self.sala.reserva_atual), 1)
         self.assertEqual(self.sala.reserva_atual[0].data_hora_inicio, self.amanha_hora_1)

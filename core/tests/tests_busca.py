@@ -30,6 +30,15 @@ class TestBuscaPadrao(TestCaseBase):
         response = self.busca_pessoa()
         self.assertIsNone(response['pessoas'][0]['bloqueio'])
 
+    def test_busca_itens_emprestados_pessoa(self):
+        reservas = self.sala.pedir_agora(self.pessoa, self.amanha_hora_1)
+        response = self.busca_pessoa()
+        self.assertEqual(response['pessoas'][0]['reservas'][0]['item'], self.sala.nome)
+        self.assertEqual(response['pessoas'][0]['reservas'][0]['id'], reservas[0].id)
+        self.assertEqual(response['pessoas'][0]['reservas'][0]['item_id'], self.sala.id)
+        self.assertEqual(response['pessoas'][0]['reservas'][0]['data_hora_fim'], reservas[0].data_hora_fim)
+
+
     def test_busca_pessoa_bloqueada(self):
         self.pessoa.bloquear_emprestimos_ate = self.amanha_hora_1
         self.pessoa.save()
@@ -97,13 +106,11 @@ class TestBuscaItemUnitario(TestCaseBase):
         self.sala.fazer_reserva(self.pessoa, self.hoje_hora_1, self.hoje_hora_2,)
         response = self.busca_sala()  
         self.assertEqual(response['itens'][0]['status']['code'], STATUS_ITEM['utilizado']['code'])
-
     
     def test_reservado_precisa_devolver_e_nao_devolveu(self):
         self.sala.fazer_reserva(self.pessoa, self.ontem_hora_1, self.ontem_hora_2,)
         response = self.busca_sala()  
         self.assertEqual(response['itens'][0]['status']['code'], STATUS_ITEM['devol_atrasada']['code'])
-
     
     def test_reservado_precisa_devolver_e_devolveu(self):
         reservas = self.sala.fazer_reserva(self.pessoa, self.ontem_hora_1, self.ontem_hora_2,)
@@ -124,7 +131,9 @@ class TestBuscaItemUnitario(TestCaseBase):
         self.sala.fazer_reserva(self.pessoa,)
         response = self.busca_sala()  
         self.assertEqual(response['itens'][0]['status']['code'], STATUS_ITEM['fila']['code'])
-     
+    
+
+
 class TesteBuscaItemMulti(TestCaseBase):
        
     def test_item(self):

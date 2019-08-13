@@ -29,3 +29,11 @@ class TestErros(TestCaseBase):
         self.sala.reserva_por_fila = True
         with self.assertRaises(ValidationError):
             self.sala.fazer_reserva(self.pessoa, self.amanha_hora_1,)
+    
+            
+    def test_fazer_reserva_reservado(self):
+        self.sala.pedir_agora(self.pessoa, self.amanha_hora_1)
+        with self.assertRaises(ValidationError):
+            self.sala.pedir_agora(self.pessoa, self.amanha_hora_1)
+        
+        
