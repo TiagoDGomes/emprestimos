@@ -10,8 +10,8 @@ from django.utils import timezone
 from localflavor.br.validators import BRCPFValidator
 from django.core.exceptions import ValidationError
 
-STATUS_ITEM = dict(    
-    
+STATUS_ITEM = dict(
+
     problema_registro=dict(
         code=-7,
         verbose='problema no registro',
@@ -69,7 +69,7 @@ STATUS_ITEM = dict(
     ),
     utilizado=dict(
         code=12,
-        verbose='em utilização',
+        verbose='em uso',
         attr_class='warning'
     ),
     fila=dict(
@@ -83,8 +83,7 @@ STATUS_ITEM = dict(
 class Pessoa(models.Model):
     nome = models.CharField(max_length=125)
     cpf = models.CharField(max_length=14, null=True, blank=True, validators=[BRCPFValidator(),], verbose_name='CPF')
-    matricula = models.CharField(
-        max_length=35, unique=True, null=True, blank=True)
+    matricula = models.CharField(max_length=35, unique=True, null=True, blank=True)
     detalhes = models.TextField(null=True, blank=True,)
     observacao = models.TextField(null=True, blank=True, verbose_name='observação')
     bloquear_emprestimos_ate = models.DateField(null=True, blank=True, verbose_name='bloquear empréstimos até',)
@@ -106,10 +105,11 @@ class Pessoa(models.Model):
 
     @property
     def reservas_atuais(self):
-        reservas = self.emprestimos.filter(Q(data_devolucao__lt=timezone.now())|
-                            (Q(data_hora_fim__gt=timezone.now())&Q(item__necessita_confirmacao_devolucao=True)))
-        
-        return [{'item': x.item.nome, 'item_id': x.item.id, 'id': x.id, 'data_hora_fim': x.data_hora_fim.isoformat()} for x in reservas]
+        reservas = self.emprestimos.filter(Q(data_devolucao__lt=timezone.now()) |
+                                           (Q(data_hora_fim__gt=timezone.now()) & Q(item__necessita_confirmacao_devolucao=True)))
+
+        return [{'item': x.item.nome, 'item_id': x.item.id, 'id': x.id, 'data_hora_fim': x.data_hora_fim.isoformat() if x.data_hora_fim else ''} for x in reservas]
+
 
 class TipoItem(models.Model):
     nome = models.CharField(max_length=255)
@@ -144,25 +144,18 @@ class ItemEmprestimo(models.Model):
     reserva_por_fila = models.BooleanField(
         null=True, default=False, help_text='Permite apenas reserva por fila de espera'
     )
-    bloqueio_minutos_antes = models.IntegerField(null=True, blank=True, default=60, help_text='Impede de reservar minutos antes da próxima reserva (não tem efeito para item com quantidade total maior que 1)')
-    
+    bloqueio_minutos_antes = models.IntegerField(null=True, blank=True, default=60,
+                                                 help_text='Impede de reservar minutos antes da próxima reserva (não tem efeito para item com quantidade total maior que 1)')
+
     class Meta:
         verbose_name = 'item para empréstimo'
         verbose_name_plural = 'itens para empréstimo'
 
-
     def __str__(self):
-        return self.nome
-
+        return self.nome if self.quantidade_total > 1 else '{} ({})'.format(self.nome,self.codigo)
 
     def fazer_reserva(self, pessoa_responsavel, data_hora_inicio=None, data_hora_fim=None, observacoes='', quantidade=1):
         reservas = []
-        if pessoa_responsavel.bloqueio:
-            raise ValidationError('Pessoa bloqueada')
-        print(('fazer reserva', self.quantidade_total, self.status['code']))
-        if self.quantidade_total == 1 and (self.status['code'] < 1 or self.status['code'] > 10):
-            print(('fazer reserva', self.status))
-            raise ValidationError("Não é possível reservar. Status: {}".format(self.status['verbose']))
         for _ in range(quantidade):
             emprestimo = Emprestimo.objects.create(item=self, pessoa_responsavel=pessoa_responsavel)
             emprestimo.data_hora_inicio = data_hora_inicio
@@ -172,29 +165,24 @@ class ItemEmprestimo(models.Model):
             reservas.append(emprestimo)
         return reservas
 
-
     def pedir_agora(self, pessoa_responsavel, data_hora_fim=None, observacoes='', quantidade=1):
         return self.fazer_reserva(pessoa_responsavel, timezone.now(), data_hora_fim, observacoes, quantidade)
-
-    
-
-    
 
     @property
     def status(self):
         if self.reserva_bloqueada:
             return STATUS_ITEM['bloqueado']
-        
+
         now = timezone.now()
         status_utilizacao = {}
         if self.quantidade_total > 1:
             status_utilizacao['utilizado'] = len(self.reserva_atual)
             status_utilizacao['restante'] = self.quantidade_total - len(self.reserva_atual)
-            key = 'multiplo' if status_utilizacao['restante'] > 0 else 'multiplo_ocupado'           
+            key = 'multiplo' if status_utilizacao['restante'] > 0 else 'multiplo_ocupado'
             
         elif not self.reserva_atual:
             key = 'disponivel'
-        else:            
+        else:
             res_atual = self.reserva_atual[0]
             key = 'desconhecido'
             status_utilizacao = dict(
@@ -207,13 +195,14 @@ class ItemEmprestimo(models.Model):
                 if res_atual.data_hora_inicio is None or res_atual.data_hora_fim is None:
                     key = 'problema_registro'
                     status_utilizacao['data_hora_valida'] = False
+                    status_utilizacao['verbose'] = 'Data/hora da última reserva é inválida'
                 else:
                     status_utilizacao['data_hora_valida'] = True
                     status_utilizacao['data_hora_inicio'] = res_atual.data_hora_inicio.isoformat()
-                    status_utilizacao['data_hora_fim'] = res_atual.data_hora_fim.isoformat()
+                    status_utilizacao['data_hora_fim'] = res_atual.data_hora_fim.isoformat() if res_atual.data_hora_fim else ''
                     if res_atual.data_hora_inicio > now:  # se nao iniciou
                         key = 'disponivel'
-                        hora_bloqueio = res_atual.data_hora_inicio - timedelta(minutes=self.bloqueio_minutos_antes)                        
+                        hora_bloqueio = res_atual.data_hora_inicio - timedelta(minutes=self.bloqueio_minutos_antes)
                         if hora_bloqueio <= now:
                             key = 'reservado'
                     else:
@@ -226,9 +215,9 @@ class ItemEmprestimo(models.Model):
                         elif self.necessita_confirmacao_retirada:
                             if res_atual.data_retirada is None:
                                 key = 'ret_atrasada'
-                                    
-        z = status_utilizacao.copy()
-        z.update(STATUS_ITEM[key])
+
+        z = STATUS_ITEM[key].copy()
+        z.update(status_utilizacao)
         return z
 
     @property
@@ -241,15 +230,16 @@ class ItemEmprestimo(models.Model):
             Q(data_devolucao__isnull=True) & Q(item__necessita_confirmacao_devolucao=True)
         )
         return lasts
-        
 
 
 class Emprestimo(models.Model):
     item = models.ForeignKey(ItemEmprestimo, on_delete=models.CASCADE)
     pessoa_responsavel = models.ForeignKey(
-        Pessoa, on_delete=models.CASCADE, related_name='emprestimos', verbose_name='Pessoa responsável')
+        Pessoa, on_delete=models.CASCADE, related_name='emprestimos',
+        verbose_name='Pessoa responsável')
     pessoa_retirada = models.ForeignKey(
-        Pessoa, null=True, blank=True, on_delete=models.CASCADE, related_name='pessoa_retirada', verbose_name='Pessoa a retirar')
+        Pessoa, null=True, blank=True, on_delete=models.CASCADE,
+        related_name='pessoa_retirada', verbose_name='Pessoa a retirar')
     data_hora_inicio = models.DateTimeField(
         null=True, blank=True, verbose_name='Data/hora de início',)
     data_hora_fim = models.DateTimeField(
@@ -260,8 +250,8 @@ class Emprestimo(models.Model):
         null=True, blank=True, verbose_name='Data/hora de devolução')
 
     class Meta:
-        verbose_name = 'empréstimo registrado'
-        verbose_name_plural = 'empréstimos registrados'
+        verbose_name = 'registro de empréstimo'
+        verbose_name_plural = 'registros de empréstimos'
 
     def __str__(self):
         return "{item} por {nome} em {data}".format(item=self.item.nome, nome=self.pessoa_responsavel.nome, data=self.data_hora_inicio)
@@ -286,12 +276,12 @@ class Emprestimo(models.Model):
     def _validator_data_hora_inicio(self, value):
         if self.data_hora_inicio and self.item.reserva_por_fila:
             raise ValidationError('Este item permite apenas reservas por fila de espera')
-        
+
     def _validator_data_hora_fim(self, value):
         if self.data_hora_fim and self.data_hora_fim < self.data_hora_inicio:
             raise ValidationError('Não é possivel definir uma data anterior à reserva')
 
-    def _validator_data_devolucao(self, value):         
+    def _validator_data_devolucao(self, value):
         if self.data_devolucao and self.data_devolucao < self.data_hora_inicio:
             raise ValidationError('Não é possivel definir uma data anterior à reserva')
 
@@ -299,12 +289,14 @@ class Emprestimo(models.Model):
         if not self.id:
             if self.pessoa_responsavel.bloqueio:
                 raise ValidationError('Esta pessoa está bloqueada para empréstimos')
-    
+
     def _validator_item(self, value):
         if not self.id:
             code = self.item.status['code']
-            if code not in [1, 10]:
-                raise ValidationError('Não é possivel reservar este item: ' + self.item.status['verbose'])
+            if code < 1 or code > 10:
+                raise ValidationError("Não é possível reservar este item: {}".format(self.item.status['verbose']))
+ 
+
 
     def save(self, *args, **kwargs):
         self.full_clean()

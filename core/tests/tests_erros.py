@@ -30,10 +30,17 @@ class TestErros(TestCaseBase):
         with self.assertRaises(ValidationError):
             self.sala.fazer_reserva(self.pessoa, self.amanha_hora_1,)
     
-            
+    def test_reservar_item_todos_ocupados(self):
+        for i in range(self.lapis.quantidade_total):
+            self.lapis.pedir_agora(self.pessoa,) 
+        
+        with self.assertRaises(ValidationError):
+            self.lapis.pedir_agora(self.pessoa,) 
+               
     def test_fazer_reserva_reservado(self):
         self.sala.pedir_agora(self.pessoa, self.amanha_hora_1)
         with self.assertRaises(ValidationError):
             self.sala.pedir_agora(self.pessoa, self.amanha_hora_1)
+
         
         
