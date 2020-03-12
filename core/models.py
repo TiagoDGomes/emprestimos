@@ -280,6 +280,8 @@ class Emprestimo(models.Model):
         self._meta.get_field('data_hora_inicio').validators = [self._validator_data_hora_inicio]
         self._meta.get_field('data_hora_fim').validators = [self._validator_data_hora_fim]
         self._meta.get_field('data_devolucao').validators = [self._validator_data_devolucao]
+        self._meta.get_field('item').validators = [self._validator_item]
+        self._meta.get_field('pessoa_responsavel').validators = [self._validator_pessoa_responsavel]
 
     def _validator_data_hora_inicio(self, value):
         if self.data_hora_inicio and self.item.reserva_por_fila:
@@ -292,6 +294,17 @@ class Emprestimo(models.Model):
     def _validator_data_devolucao(self, value):         
         if self.data_devolucao and self.data_devolucao < self.data_hora_inicio:
             raise ValidationError('Não é possivel definir uma data anterior à reserva')
+
+    def _validator_pessoa_responsavel(self, value):
+        if not self.id:
+            if self.pessoa_responsavel.bloqueio:
+                raise ValidationError('Esta pessoa está bloqueada para empréstimos')
+    
+    def _validator_item(self, value):
+        if not self.id:
+            code = self.item.status['code']
+            if code not in [1, 10]:
+                raise ValidationError('Não é possivel reservar este item: ' + self.item.status['verbose'])
 
     def save(self, *args, **kwargs):
         self.full_clean()
