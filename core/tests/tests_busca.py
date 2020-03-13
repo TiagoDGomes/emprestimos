@@ -90,10 +90,22 @@ class TestBuscaItemUnitario(TestCaseBase):
         self.assertEqual(response['itens'][0]['status']['code'], STATUS_ITEM['disponivel']['code'])
 
     def test_reservado_necessita_confirmar_retirada_e_nao_retirou(self):
+        self.sala.necessita_confirmacao_retirada = True
+        self.sala.necessita_confirmacao_devolucao = False
+        self.sala.save()
         self.sala.fazer_reserva(self.pessoa, self.hoje_hora_1, self.hoje_hora_2,)
         response = self.busca_sala()  
         self.assertEqual(response['itens'][0]['status']['code'], STATUS_ITEM['ret_atrasada']['code'])
-
+    
+    def test_reservado_e_nao_utilizado___necessita_confirmar_retirada_e_devolucao_e_nao_retirou(self):
+        self.sala.necessita_confirmacao_retirada = True
+        self.sala.necessita_confirmacao_devolucao = True
+        self.sala.save()
+        self.sala.fazer_reserva(self.pessoa, self.hoje_hora_1, self.hoje_hora_2,)
+        response = self.busca_sala() 
+        self.assertEqual(response['itens'][0]['status']['verbose'], STATUS_ITEM['ret_atrasada']['verbose'])
+   
+    
     def test_reservado_bloqueio_alerta(self):
         self.sala.bloqueio_minutos_antes = 60
         self.sala.save()
@@ -101,8 +113,9 @@ class TestBuscaItemUnitario(TestCaseBase):
         response = self.busca_sala()  
         self.assertEqual(response['itens'][0]['status']['code'], STATUS_ITEM['reservado']['code'])
 
-    def test_reservado_e_nao_necessita_confirmar_retirada(self):
+    def test_utilizado_e_nao_necessita_confirmar_retirada(self):
         self.sala.necessita_confirmacao_retirada = False
+        self.sala.necessita_confirmacao_devolucao = False
         self.sala.save()
         self.sala.fazer_reserva(self.pessoa, self.hoje_hora_1, self.hoje_hora_2,)
         response = self.busca_sala()  

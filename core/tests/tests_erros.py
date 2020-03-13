@@ -1,7 +1,10 @@
 
 
-from .base import TestCaseBase
 from django.core.exceptions import ValidationError
+
+from ..models import STATUS_ITEM
+
+from .base import TestCaseBase
 
 
 class TestErros(TestCaseBase):
@@ -37,10 +40,11 @@ class TestErros(TestCaseBase):
         with self.assertRaises(ValidationError):
             self.lapis.pedir_agora(self.pessoa,) 
                
-    def test_fazer_reserva_reservado(self):
-        self.sala.pedir_agora(self.pessoa, self.amanha_hora_1)
+    def test_fazer_reserva_reservado(self): 
+        self.sala.necessita_confirmacao_retirada = False
+        self.sala.necessita_confirmacao_devolucao = True
+        self.sala.save()    
+        self.sala.pedir_agora(self.pessoa, self.amanha_hora_1,)
+        print(self.sala.status)        
         with self.assertRaises(ValidationError):
-            self.sala.pedir_agora(self.pessoa, self.amanha_hora_1)
-
-        
-        
+            self.sala.pedir_agora(self.pessoa, self.amanha_hora_1,)
